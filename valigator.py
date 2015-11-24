@@ -1,7 +1,6 @@
 from bottle import post, run, request, abort
 from filesystemmanager import FileSystemManager
 from mailutils import MailUtils
-from dockermanager import DockerManager
 from utils import get_uuid
 from yaml import safe_load
 import importlib
@@ -77,8 +76,6 @@ def load_configuration(configuration_file):
 
 if __name__ == '__main__':
     config = load_configuration("config.yml")
-    docker_configuration = config["docker"]["images"]
     manager = FileSystemManager()
     mail = MailUtils(config["mail"])
-    docker = DockerManager(config["docker"], config["mail"])
     run(host=config['bind']['address'], port=config['bind']['port'])
