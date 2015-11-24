@@ -37,10 +37,10 @@ def validate(backup):
     except:
         abort(400, 'No extension found for: ' + backup)
 
-    workdir = ''.join([config["docker_temp_directory"], '/', get_uuid()])
+    workdir = ''.join([config["docker_temp_directory"], '/', generate_uuid()])
 
     try:
-        manager.extract_archive(archive_path, workdir)
+        filesystem.extract_archive(archive_path, workdir)
     except:
         notify_archive(archive_path)
         abort(400, 'An error occured during archive extraction.')
@@ -76,6 +76,6 @@ def load_configuration(configuration_file):
 
 if __name__ == '__main__':
     config = load_configuration("config.yml")
-    manager = FileSystemManager()
+    filesystem = FileSystemManager()
     mail = MailUtils(config["mail"])
     run(host=config['bind']['address'], port=config['bind']['port'])
