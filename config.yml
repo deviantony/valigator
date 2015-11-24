@@ -1,0 +1,23 @@
+docker_temp_directory: '/tmp'
+docker_database_directory: '/opt/docker/mongodb'
+
+docker:
+  socket: 'unix://var/run/docker.sock'
+  images:
+    mysql55: 'my_mysql55:latest'
+    mongodb26: 'my_mongodb26:latest'
+
+bind:
+  address: '0.0.0.0'
+  port: 8080
+
+mail:
+  from_address: 'automated-backup-test@domain'
+  to_address: 'destination-adress@domain'
+  smtp:
+    server: 'smtp.domain'
+    port: 25
+    timeout: 10
+    tls_authentication: True
+    user: 'user'
+    password: 'pass'
