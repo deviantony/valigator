@@ -1,10 +1,10 @@
-# backup-validator
+# valigator
 
 > Check your backups before you wreck yourself !
 
 Use Docker to perform database backup validation.
 
-This exposes an API to trigger a backup restoration inside a Docker container.
+This tool exposes a HTTP API to trigger a backup restoration inside a Docker container.
 
 Supported databases:
 
@@ -38,12 +38,12 @@ Do not forget to update the *settings.py* file after changing the images name.
 Start the API:
 
 ```bash
-$ sudo python backuptestapi.py
+$ sudo python valigator.py
 ```
 
 ## Endpoints
 
-### /backup/mysql
+### /backup/mysql55
 
 Use this endpoint to start a restoration test against a MySQL backup archive.
 
@@ -57,7 +57,7 @@ It expects a JSON request body to be POST. The request body must look something 
 
 *NOTE*: the archive must accessible on the filesystem.
 
-### /backup/mongodb
+### /backup/mongodb26
 
 Use this endpoint to start a restoration test against a MongoDB backup archive.
 
@@ -73,7 +73,7 @@ It expects a JSON request body to be POST. The request body must look something 
 
 ## Notifications
 
-A notification of failure is sent in the following cases:
+A notification of failure is sent via email in the following cases:
 
 * An error occured during the archive extraction
 * An error occured during the restoration phasis
