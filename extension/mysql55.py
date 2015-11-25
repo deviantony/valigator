@@ -23,7 +23,7 @@ class mysql55:
             command=command)
 
         self.client.start(container.get('Id'), binds={
-            backup_path:
+            extracted_backup_path:
             {
                 'bind': '/var/lib/mysql',
                 'ro': False
