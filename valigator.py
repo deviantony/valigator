@@ -1,7 +1,7 @@
 from bottle import post, run, request, abort
 from filesystemmanager import FileSystemManager
 from mailutils import MailUtils
-from utils import get_uuid
+from utils import generate_uuid
 from yaml import safe_load
 import importlib
 
