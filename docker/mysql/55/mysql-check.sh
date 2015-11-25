@@ -16,9 +16,9 @@ MAIL_TITLE="Automated MySQL backup restoration failed"
 ## ================================================
 ## LIBRARIES
 ## ================================================
-SHFLAGS_LIB_PATH=/usr/lib/workit/bash-libraries/shflags
-BSFL_LIB_PATH=/usr/lib/workit/bash-libraries/bsfl
-CBL_LIB_PATH=/usr/lib/workit/bash-libraries/cbl
+SHFLAGS_LIB_PATH=/usr/lib/shflags-1.0.5/lib/shflags
+BSFL_LIB_PATH=/usr/lib/bsfl-2.0.1/lib/bsfl
+CBL_LIB_PATH=/usr/lib/common-bash-library-0.1/cbl
 
 source ${CBL_LIB_PATH}
 if [[ $? -ne 0 ]]; then
