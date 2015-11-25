@@ -1,11 +1,11 @@
 from docker import Client
 
 
-class mongo24:
+class mongo26:
 
     def __init__(self, configuration):
         self.client = Client(configuration['docker']['socket'])
-        self.image = configuration['docker']['images']['mongo24']
+        self.image = configuration['docker']['images']['mongodb26']
         self.mail = configuration['mail']
 
     def run_container(self, extracted_backup_path):
