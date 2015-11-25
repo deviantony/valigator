@@ -13,7 +13,7 @@ def validate(backup):
     Specify JSON data for backup archive info.
 
     {
-        "path": "/path/to/archive"
+        'path': '/path/to/archive'
     }
 
     First, it will try to search for an existing extension module
@@ -37,7 +37,7 @@ def validate(backup):
     except:
         abort(400, 'No extension found for: ' + backup)
 
-    workdir = ''.join([config["docker_temp_directory"], '/', generate_uuid()])
+    workdir = ''.join([config['docker_temp_directory'], '/', generate_uuid()])
 
     try:
         filesystem.extract_archive(archive_path, workdir)
@@ -75,7 +75,7 @@ def load_configuration(configuration_file):
         return config
 
 if __name__ == '__main__':
-    config = load_configuration("config.yml")
+    config = load_configuration('valigator.yml')
     filesystem = FileSystemManager()
-    mail = MailUtils(config["mail"])
+    mail = MailUtils(config['mail'])
     run(host=config['bind']['address'], port=config['bind']['port'])
