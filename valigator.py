@@ -43,16 +43,19 @@ def validate(backup):
         filesystem.extract_archive(archive_path, workdir)
     except:
         notify_archive(archive_path)
-        abort(400, 'An error occured during archive extraction.')
+        abort(400, 'An error occurred during archive extraction.')
 
     try:
         extension.run_container(workdir)
     except:
         notify_backup(archive_path)
-        abort(400, 'An error occured during archive restoration.')
+        abort(400, 'An error occurred during archive restoration.')
 
 
 def import_extension(extension_name):
+    """This method will import a module from the 'extension' package.
+    It will then instanciate an object from the module class.
+    """
     module = importlib.import_module(
         ''.join(['extension.', extension_name]))
     extension_class = getattr(module, extension_name)
@@ -60,16 +63,19 @@ def import_extension(extension_name):
 
 
 def notify_archive(archive_path):
+    """Send a notification via email when the backup extraction fails."""
     mail.send_email('Automatic backup archive extraction failed',
                     'Unable to extract archive: ' + archive_path)
 
 
 def notify_backup(archive_path):
+    """Send a notification via email when the backup restoration fails."""
     mail.send_email('Automatic backup restoration failed',
                     'Unable to restore archive: ' + archive_path)
 
 
 def load_configuration(configuration_file):
+    """Load the configuration object from the configuration file."""
     with open(configuration_file, 'r') as stream:
         config = safe_load(stream)
         return config
