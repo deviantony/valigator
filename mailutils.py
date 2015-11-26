@@ -17,9 +17,7 @@ class MailUtils:
             self.password = mail_configuration['smtp']['password']
 
     def send_email(self, subject, body):
-        """ Initiate a SMTP session and send
-        an email.
-        """
+        """ Initiate a SMTP session and send an email."""
         msg = MIMEMultipart()
         msg['From'] = self.from_address
         msg['To'] = self.to_address

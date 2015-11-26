@@ -1,8 +1,7 @@
 from bottle import post, run, request, abort
 from filesystemmanager import FileSystemManager
 from mailutils import MailUtils
-from utils import generate_uuid
-from yaml import safe_load
+from utils import generate_uuid, load_configuration
 import importlib
 
 
@@ -61,24 +60,6 @@ def import_extension(extension_name):
     extension_class = getattr(module, extension_name)
     return extension_class(config)
 
-
-def notify_archive(archive_path):
-    """Send a notification via email when the backup extraction fails."""
-    mail.send_email('Automatic backup archive extraction failed',
-                    'Unable to extract archive: ' + archive_path)
-
-
-def notify_backup(archive_path):
-    """Send a notification via email when the backup restoration fails."""
-    mail.send_email('Automatic backup restoration failed',
-                    'Unable to restore archive: ' + archive_path)
-
-
-def load_configuration(configuration_file):
-    """Load the configuration object from the configuration file."""
-    with open(configuration_file, 'r') as stream:
-        config = safe_load(stream)
-        return config
 
 if __name__ == '__main__':
     config = load_configuration('valigator.yml')
