@@ -41,36 +41,6 @@ Start the API:
 $ sudo python valigator.py
 ```
 
-## Endpoints
-
-### /backup/mysql55
-
-Use this endpoint to start a restoration test against a MySQL backup archive.
-
-It expects a JSON request body to be POST. The request body must look something like:
-
-```json
-{
-    "archive_path": "/path/to/backup/archive",
-}
-```
-
-*NOTE*: the archive must accessible on the filesystem.
-
-### /backup/mongodb26
-
-Use this endpoint to start a restoration test against a MongoDB backup archive.
-
-It expects a JSON request body to be POST. The request body must look something like:
-
-```json
-{
-    "archive_path": "/path/to/backup/archive",
-}
-```
-
-*NOTE*: the archive must accessible on the filesystem.
-
 ## Notifications
 
 A notification of failure is sent via email in the following cases:
