@@ -2,6 +2,8 @@
 
 > Check your backups before you wreck yourself !
 
+[![Code Issues](https://www.quantifiedcode.com/api/v1/project/6b2de325c287407aaf4998cf49c1c09e/badge.svg)](https://www.quantifiedcode.com/app/project/6b2de325c287407aaf4998cf49c1c09e)
+
 Use Docker to perform database backup validation.
 
 This tool exposes a HTTP API to trigger a backup restoration inside a Docker container.
