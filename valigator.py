@@ -61,6 +61,17 @@ def import_extension(extension_name):
     return extension_class(config)
 
 
+def notify_archive(archive_path):
+    """Send a notification via email when the backup extraction fails."""
+    mail.send_email('Automatic backup archive extraction failed',
+                    'Unable to extract archive: ' + archive_path)
+
+
+def notify_backup(archive_path):
+    """Send a notification via email when the backup restoration fails."""
+    mail.send_email('Automatic backup restoration failed',
+                    'Unable to restore archive: ' + archive_path)
+
 if __name__ == '__main__':
     config = load_configuration('valigator.yml')
     filesystem = FileSystemManager()
