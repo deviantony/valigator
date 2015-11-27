@@ -1,7 +1,6 @@
 from bottle import post, run, request, abort
-from filesystemmanager import FileSystemManager
 from mailutils import MailUtils
-from utils import generate_uuid, load_configuration
+from utils import generate_uuid, load_configuration, extract_archive
 import importlib
 
 
@@ -39,7 +38,7 @@ def validate(backup):
     workdir = ''.join([config['docker_temp_directory'], '/', generate_uuid()])
 
     try:
-        filesystem.extract_archive(archive_path, workdir)
+        extract_archive(archive_path, workdir)
     except:
         notify_archive(archive_path)
         abort(400, 'An error occurred during archive extraction.')
@@ -74,6 +73,5 @@ def notify_backup(archive_path):
 
 if __name__ == '__main__':
     config = load_configuration('valigator.yml')
-    filesystem = FileSystemManager()
     mail = MailUtils(config['mail'])
     run(host=config['bind']['address'], port=config['bind']['port'])
