@@ -3,7 +3,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
-class MailUtils:
+class MailUtils(object):
 
     def __init__(self, mail_configuration):
         self.server = mail_configuration['smtp']['server']
