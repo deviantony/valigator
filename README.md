@@ -40,7 +40,7 @@ Do not forget to update the *settings.py* file after changing the images name.
 Start the API:
 
 ```bash
-$ sudo python valigator.py
+$ sudo python valigator/valigator.py
 ```
 
 ## Notifications
