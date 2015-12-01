@@ -4,7 +4,7 @@ import os
 package_root = os.path.dirname(__file__)
 
 about = {}
-with open("xtrabackup/__about__.py") as fp:
+with open("valigator/__about__.py") as fp:
     exec(fp.read(), about)
 
 # Error-handling here is to allow package to be built w/o README.rst included
