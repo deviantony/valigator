@@ -35,7 +35,7 @@ def validate(backup):
     except:
         abort(400, 'No extension found for: ' + backup)
 
-    workdir = ''.join([config['docker_temp_directory'], '/', generate_uuid()])
+    workdir = ''.join([config['valigator']['tmp_dir'], '/', generate_uuid()])
 
     try:
         extract_archive(archive_path, workdir)
@@ -74,4 +74,4 @@ def notify_backup(archive_path):
 if __name__ == '__main__':
     config = load_configuration('valigator.yml')
     mail = MailUtils(config['mail'])
-    run(host=config['bind']['address'], port=config['bind']['port'])
+    run(host=config['valigator']['host'], port=config['valigator']['port'])

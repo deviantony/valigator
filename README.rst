@@ -34,9 +34,13 @@ Use ``pip`` to install it::
 
    $ pip install valigator
 
-
 Usage
 =====
+
+WIP
+
+Configuration
+=============
 
 WIP
 

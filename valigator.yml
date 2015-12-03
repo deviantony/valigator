@@ -1,15 +1,11 @@
-docker_temp_directory: '/tmp'
-docker_database_directory: '/opt/docker/mongodb'
+valigator:
+  host: '0.0.0.0'
+  port: 7000
+  tmp_dir: '/tmp'
+  database_dir: '/opt/docker/mongodb'
 
 docker:
   socket: 'unix://var/run/docker.sock'
-  images:
-    mysql55: 'my_mysql55:latest'
-    mongodb26: 'my_mongodb26:latest'
-
-bind:
-  address: '0.0.0.0'
-  port: 7000
 
 mail:
   from_address: 'automated-backup-test@domain'
