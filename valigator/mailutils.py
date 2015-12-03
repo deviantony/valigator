@@ -2,6 +2,11 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+"""Mailing utils.
+Use this object to send emails.
+It uses the mail parameters from the configuration file.
+"""
+
 
 class MailUtils(object):
 
