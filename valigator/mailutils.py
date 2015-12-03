@@ -2,13 +2,12 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-"""Mailing utils.
-Use this object to send emails.
-It uses the mail parameters from the configuration file.
-"""
-
 
 class MailUtils(object):
+    """Mailing utils.
+    Use this object to send emails.
+    It uses the mail parameters from the configuration file.
+    """
 
     def __init__(self, mail_configuration):
         self.server = mail_configuration['smtp']['server']
