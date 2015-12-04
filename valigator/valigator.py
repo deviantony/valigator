@@ -2,6 +2,7 @@ from bottle import post, run, request, abort
 from mailutils import MailUtils
 from utils import generate_uuid, load_configuration, extract_archive
 import importlib
+from tarfile import TarError
 
 
 @post('/validate/<backup>')
@@ -32,14 +33,14 @@ def validate(backup):
 
     try:
         extension = import_extension(backup)
-    except:
+    except ImportError:
         abort(400, 'No extension found for: ' + backup)
 
     workdir = ''.join([config['valigator']['tmp_dir'], '/', generate_uuid()])
 
     try:
         extract_archive(archive_path, workdir)
-    except:
+    except (OSError, TarError):
         notify_archive(archive_path)
         abort(400, 'An error occurred during archive extraction.')
 
