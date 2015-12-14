@@ -3,6 +3,7 @@ valigator:
   port: 7000
   tmp_dir: '/tmp'
   database_dir: '/opt/docker/mongodb'
+  extension_dir: 'valigator/extension'
 
 docker:
   socket: 'unix://var/run/docker.sock'

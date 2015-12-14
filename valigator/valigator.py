@@ -1,7 +1,7 @@
 from bottle import post, run, request, abort
 from mailutils import MailUtils
 from utils import generate_uuid, load_configuration, extract_archive
-import importlib
+from importlib.machinery import SourceFileLoader
 from tarfile import TarError
 
 
@@ -37,6 +37,7 @@ def validate(backup):
         abort(400, 'No extension found for: ' + backup)
 
     workdir = ''.join([config['valigator']['tmp_dir'], '/', generate_uuid()])
+    backup_data = {'archive_path': archive_path, 'workdir': workdir}
 
     try:
         extract_archive(archive_path, workdir)
@@ -45,19 +46,23 @@ def validate(backup):
         abort(400, 'An error occurred during archive extraction.')
 
     try:
-        extension.run_container(workdir)
+        extension.run_container(backup_data)
     except:
         notify_backup(archive_path)
         abort(400, 'An error occurred during archive restoration.')
 
 
 def import_extension(extension_name):
-    """This method will import a module from the 'extension' package.
+    """This method will import a module from the 'extension_dir' folder.
+    This folder is specified in the configuration file.
     It will then instanciate an object from the module class.
     """
-    module = importlib.import_module(
-        ''.join(['extension.', extension_name]))
-    extension_class = getattr(module, extension_name)
+    mod = SourceFileLoader("config['valigator']['extension_dir']",
+                           ''.join([config['valigator']['extension_dir'],
+                                    '/',
+                                    extension_name,
+                                    '.py'])).load_module()
+    extension_class = getattr(mod, extension_name)
     return extension_class(config)
 
 
