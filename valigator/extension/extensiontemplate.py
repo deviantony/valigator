@@ -1,7 +1,7 @@
 from docker import Client
 
 
-class extension_template:
+class extensionTemplate(object):
     """ Extension template.
     Create your Docker container specific to your backup restoration
     in this class.
@@ -13,4 +13,5 @@ class extension_template:
 
     def run_container(self, backup_info):
         """Initialize and run your container in this section"""
+        print(backup_info)
         pass
