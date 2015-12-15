@@ -14,4 +14,3 @@ class extensionTemplate(object):
     def run_container(self, backup_info):
         """Initialize and run your container in this section"""
         print(backup_info)
-        pass
