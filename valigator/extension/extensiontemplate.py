@@ -1,7 +1,7 @@
 from docker import Client
 
 
-class extensionTemplate(object):
+class ExtensionTemplate(object):
     """ Extension template.
     Create your Docker container specific to your backup restoration
     in this class.

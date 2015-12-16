@@ -12,7 +12,7 @@ def validate(backup):
     Specify JSON data for backup archive info.
 
     {
-        'path': '/path/to/archive'
+        'archive_path': '/path/to/archive'
     }
 
     First, it will try to search for an existing extension module
@@ -29,7 +29,7 @@ def validate(backup):
     data = request.json
     if not data:
         abort(400, 'No data received')
-    archive_path = data['path']
+    archive_path = data['archive_path']
 
     try:
         extension = import_extension(backup)
