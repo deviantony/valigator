@@ -1,8 +1,9 @@
 from bottle import post, run, request, abort
-from mailutils import MailUtils
-from utils import generate_uuid, load_configuration, extract_archive
 from importlib.machinery import SourceFileLoader
 from tarfile import TarError
+from valigator.mailutils import MailUtils
+from valigator.utils import generate_uuid, load_configuration, extract_archive
+import click
 
 
 @post('/validate/<backup>')
@@ -77,7 +78,12 @@ def notify_backup(archive_path):
     mail.send_email('Automatic backup restoration failed',
                     'Unable to restore archive: ' + archive_path)
 
-if __name__ == '__main__':
-    config = load_configuration('valigator.yml')
+
+@click.command()
+@click.option('--config', default='/etc/valigator/valigator.yml',
+              help='Valigator configuration file',
+              show_default=True)
+def main(config):
+    config = load_configuration(config)
     mail = MailUtils(config['mail'])
     run(host=config['valigator']['host'], port=config['valigator']['port'])

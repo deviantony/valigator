@@ -7,7 +7,7 @@ __title__ = "valigator"
 __summary__ = "Validate your backups !"
 __uri__ = "https://github.com/deviantony/valigator"
 
-__version__ = "0.1.0"
+__version__ = "0.1.3"
 
 __author__ = "Anthony Lapenna"
 __email__ = "lapenna.anthony@gmail.com"

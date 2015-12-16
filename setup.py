@@ -39,9 +39,11 @@ setup(
 
     keywords='database backup docker',
 
-    packages=find_packages(exclude=['contrib', 'docs', 'tests*', 'sql']),
+    packages=find_packages(exclude=['contrib', 'docs']),
 
-    install_requires=['bottle', 'PyYAML', 'docker-py'],
+    install_requires=['bottle', 'PyYAML', 'docker-py', 'click'],
+
+    data_files=[('/etc/valigator', ['valigator.yml'])],
 
     entry_points={
         'console_scripts': [

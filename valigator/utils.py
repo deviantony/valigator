@@ -1,7 +1,7 @@
 import base64
 import uuid
-from yaml import safe_load
 import tarfile
+from yaml import safe_load
 
 
 def generate_uuid():
