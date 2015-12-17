@@ -1,9 +1,12 @@
+import click
+from os import path
 from bottle import post, run, request, abort
 from importlib.machinery import SourceFileLoader
 from tarfile import TarError
 from valigator.mailutils import MailUtils
 from valigator.utils import generate_uuid, load_configuration, extract_archive
-import click
+
+config = {}
 
 
 @post('/validate/<backup>')
@@ -58,11 +61,9 @@ def import_extension(extension_name):
     This folder is specified in the configuration file.
     It will then instanciate an object from the module class.
     """
-    mod = SourceFileLoader("config['valigator']['extension_dir']",
-                           ''.join([config['valigator']['extension_dir'],
-                                    '/',
-                                    extension_name,
-                                    '.py'])).load_module()
+    mod = SourceFileLoader(config['valigator']['extension_dir'],
+                           path.join(config['valigator']['extension_dir'],
+                           extension_name.lower() + '.py')).load_module()
     extension_class = getattr(mod, extension_name)
     return extension_class(config)
 
@@ -80,10 +81,12 @@ def notify_backup(archive_path):
 
 
 @click.command()
-@click.option('--config', default='/etc/valigator/valigator.yml',
+@click.option('--conf', default='/etc/valigator/valigator.yml',
               help='Valigator configuration file',
               show_default=True)
-def main(config):
-    config = load_configuration(config)
+def main(conf):
+    """Main function, entry point of the program."""
+    global config
+    config = load_configuration(conf)
     mail = MailUtils(config['mail'])
     run(host=config['valigator']['host'], port=config['valigator']['port'])
