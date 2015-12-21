@@ -1,10 +1,10 @@
 import click
 from os import path
 from bottle import post, run, request, abort
-from importlib.machinery import SourceFileLoader
+import imp
 from tarfile import TarError
-from valigator.mailutils import MailUtils
-from valigator.utils import generate_uuid, load_configuration, extract_archive
+from mailutils import MailUtils
+from utils import generate_uuid, load_configuration, extract_archive
 
 config = {}
 
@@ -61,9 +61,9 @@ def import_extension(extension_name):
     This folder is specified in the configuration file.
     It will then instanciate an object from the module class.
     """
-    mod = SourceFileLoader(config['valigator']['extension_dir'],
-                           path.join(config['valigator']['extension_dir'],
-                           extension_name.lower() + '.py')).load_module()
+    extension_path = path.join(config['valigator']['extension_dir'],
+                               extension_name.lower() + '.py')
+    mod = imp.load_source(config['valigator']['extension_dir'], extension_path)
     extension_class = getattr(mod, extension_name)
     return extension_class(config)
 

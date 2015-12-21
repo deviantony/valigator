@@ -58,4 +58,4 @@ This tool has been tested on the following OSes:
 
 It has been tested against the following Python versions:
 
-* Python 3.4
+* Python 2.7
