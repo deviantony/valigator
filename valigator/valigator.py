@@ -7,6 +7,7 @@ from mailutils import MailUtils
 from utils import generate_uuid, load_configuration, extract_archive
 
 config = {}
+mail = {}
 
 
 @post('/validate/<backup>')
@@ -86,7 +87,7 @@ def notify_backup(archive_path):
               show_default=True)
 def main(conf):
     """Main function, entry point of the program."""
-    global config
+    global config, mail
     config = load_configuration(conf)
     mail = MailUtils(config['mail'])
     run(host=config['valigator']['host'], port=config['valigator']['port'])
