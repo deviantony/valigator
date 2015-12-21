@@ -33,8 +33,8 @@ setup(
 
         'License :: OSI Approved :: Apache Software License',
 
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
     ],
 
     keywords='database backup docker',
