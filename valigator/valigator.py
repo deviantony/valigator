@@ -1,13 +1,14 @@
 import click
 from os import path
 from bottle import post, run, request, abort
-import imp
 from tarfile import TarError
 from mailutils import MailUtils
 from utils import generate_uuid, load_configuration, extract_archive
+from dockermanager import DockerManager
 
 config = {}
 mail = {}
+docker = {}
 
 
 @post('/validate/<backup>')
@@ -37,12 +38,15 @@ def validate(backup):
     archive_path = data['archive_path']
 
     try:
-        extension = import_extension(backup)
-    except ImportError:
-        abort(400, 'No extension found for: ' + backup)
+        config['extension'][backup]
+    except KeyError:
+        abort(400, 'No extension configuration found for: ' + backup)
 
     workdir = ''.join([config['valigator']['tmp_dir'], '/', generate_uuid()])
-    backup_data = {'archive_path': archive_path, 'workdir': workdir}
+    backup_data = {'archive_path': archive_path,
+                   'workdir': workdir,
+                   'image': config['extension'][backup]['image'],
+                   'command': config['extension'][backup]['command']}
 
     try:
         extract_archive(archive_path, workdir)
@@ -50,23 +54,10 @@ def validate(backup):
         notify_archive(archive_path)
         abort(400, 'An error occurred during archive extraction.')
 
-    try:
-        extension.run_container(backup_data)
-    except:
+    exit_code = docker.run_container(backup_data)
+    if exit_code != 0:
         notify_backup(archive_path)
-        abort(400, 'An error occurred during archive restoration.')
-
-
-def import_extension(extension_name):
-    """This method will import a module from the 'extension_dir' folder.
-    This folder is specified in the configuration file.
-    It will then instanciate an object from the module class.
-    """
-    extension_path = path.join(config['valigator']['extension_dir'],
-                               extension_name.lower() + '.py')
-    mod = imp.load_source(config['valigator']['extension_dir'], extension_path)
-    extension_class = getattr(mod, extension_name)
-    return extension_class(config)
+        abort(400, 'An error occurred during backup restoration.')
 
 
 def notify_archive(archive_path):
@@ -87,7 +78,8 @@ def notify_backup(archive_path):
               show_default=True)
 def main(conf):
     """Main function, entry point of the program."""
-    global config, mail
+    global config, mail, docker
     config = load_configuration(conf)
     mail = MailUtils(config['mail'])
+    docker = DockerManager(config)
     run(host=config['valigator']['host'], port=config['valigator']['port'])
