@@ -27,9 +27,10 @@ class MailUtils(object):
         msg['To'] = self.to_address
         msg['Subject'] = subject
         msg.attach(MIMEText(body, 'plain'))
-        with smtplib.SMTP(self.server, self.port,
-                          timeout=self.timeout) as smtp:
-            if self.tls_auth:
-                smtp.starttls()
-                smtp.login(self.user, self.password)
-            smtp.send_message(msg)
+        smtp = smtplib.SMTP(self.server, self.port,
+                            timeout=self.timeout)
+        if self.tls_auth:
+            smtp.starttls()
+            smtp.login(self.user, self.password)
+        smtp.sendmail(self.from_address, self.to_address, msg.as_string())
+        smtp.quit()

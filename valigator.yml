@@ -18,3 +18,8 @@ mail:
     tls_authentication: True
     user: 'user'
     password: 'pass'
+
+extension:
+  mongodb25:
+    image: 'mongodb:latest'
+    command: 'backup.sh'
