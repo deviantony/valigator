@@ -1,12 +1,16 @@
 valigator:
-  host: '0.0.0.0'
+  bind: '0.0.0.0'
   port: 7000
-  tmp_dir: '/tmp'
-  database_dir: '/opt/docker/mongodb'
-  extension_dir: 'valigator/extension'
+  tmp_dir: '/tmp/valigator'
 
 docker:
-  socket: 'unix://var/run/docker.sock'
+  url: 'unix://var/run/docker.sock'
+
+celery:
+  BROKER_URL: 'amqp://localhost'
+  CELERY_TASK_SERIALIZER: 'json'
+  CELERY_ACCEPT_CONTENT: ['json']
+  CELERY_IMPORTS: ['valigator.scheduler']
 
 mail:
   from_address: 'automated-backup-test@domain'
@@ -20,6 +24,6 @@ mail:
     password: 'pass'
 
 extension:
-  mongodb25:
-    image: 'mongodb:latest'
-    command: 'backup.sh'
+  mongo26:
+    image: 'mongo:latest'
+    command: 'bash -c "mongod --fork --syslog && mongorestore /backup"'

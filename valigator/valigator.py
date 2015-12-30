@@ -1,14 +1,10 @@
+from __future__ import absolute_import
 import click
 from os import path
 from bottle import post, run, request, abort
-from tarfile import TarError
-from mailutils import MailUtils
-from utils import generate_uuid, load_configuration, extract_archive
-from dockermanager import DockerManager
-
-config = {}
-mail = {}
-docker = {}
+from .utils import generate_uuid, load_configuration
+from .scheduler import validate_backup
+from .celery import app
 
 
 @post('/validate/<backup>')
@@ -21,55 +17,35 @@ def validate(backup):
         'archive_path': '/path/to/archive'
     }
 
+    Data must be valid, otherwise it will abort with a 400 code.
+
     First, it will try to search for an existing extension definition
-    in the configuration file.
+    in the configuration file. If no matching extension is found, it
+    will abort with a 404 code.
 
-    It will then extract the backup archive into a unique folder
-    in the temporary directory specified in the configuration.
-    A notification is sent if this step fails.
-
-    Once extracted, a Docker container will be started and will
-    start a restoration procedure.
-    A notification is sent if this step fails.
+    It will then plan the backup validation by sending a message
+    to the broker.
     """
     data = request.json
     if not data:
         abort(400, 'No data received')
-    archive_path = data['archive_path']
+
+    try:
+        archive_path = data['archive_path']
+    except KeyError:
+        abort(400, 'Missing key \'archive_path\' in data')
 
     try:
         config['extension'][backup]
     except KeyError:
-        abort(400, 'No extension configuration found for: ' + backup)
+        abort(404, 'No extension configuration found for: {}'.format(backup))
 
     workdir = ''.join([config['valigator']['tmp_dir'], '/', generate_uuid()])
     backup_data = {'archive_path': archive_path,
                    'workdir': workdir,
                    'image': config['extension'][backup]['image'],
                    'command': config['extension'][backup]['command']}
-
-    try:
-        extract_archive(archive_path, workdir)
-    except (OSError, TarError):
-        notify_archive(archive_path)
-        abort(400, 'An error occurred during archive extraction.')
-
-    exit_code = docker.run_container(backup_data)
-    if exit_code != 0:
-        notify_backup(archive_path)
-        abort(400, 'An error occurred during backup restoration.')
-
-
-def notify_archive(archive_path):
-    """Send a notification via email when the backup extraction fails."""
-    mail.send_email('Automatic backup archive extraction failed',
-                    'Unable to extract archive: ' + archive_path)
-
-
-def notify_backup(archive_path):
-    """Send a notification via email when the backup restoration fails."""
-    mail.send_email('Automatic backup restoration failed',
-                    'Unable to restore archive: ' + archive_path)
+    validate_backup.delay(config, backup_data)
 
 
 @click.command()
@@ -78,8 +54,10 @@ def notify_backup(archive_path):
               show_default=True)
 def main(conf):
     """Main function, entry point of the program."""
-    global config, mail, docker
+    global config
     config = load_configuration(conf)
-    mail = MailUtils(config['mail'])
-    docker = DockerManager(config)
-    run(host=config['valigator']['host'], port=config['valigator']['port'])
+    app.conf.update(config['celery'])
+    run(host=config['valigator']['bind'], port=config['valigator']['port'])
+
+if __name__ == '__main__':
+    main()
