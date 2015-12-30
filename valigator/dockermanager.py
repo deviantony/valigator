@@ -2,6 +2,9 @@ from docker import Client
 
 
 class DockerManager:
+    """Docker manager.
+    Use this object to pull images, create and run containers.
+    """
 
     def __init__(self, configuration):
         self.client = Client(configuration['docker']['socket'])

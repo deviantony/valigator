@@ -21,8 +21,8 @@ def validate(backup):
         'archive_path': '/path/to/archive'
     }
 
-    First, it will try to search for an existing extension module
-    in the extension package.
+    First, it will try to search for an existing extension definition
+    in the configuration file.
 
     It will then extract the backup archive into a unique folder
     in the temporary directory specified in the configuration.
