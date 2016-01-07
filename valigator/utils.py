@@ -1,6 +1,8 @@
 import base64
 import uuid
 import tarfile
+from shutil import rmtree
+from os import path
 from yaml import safe_load
 
 
@@ -22,3 +24,12 @@ def extract_archive(archive_path, destination_path):
     tar = tarfile.open(archive_path)
     tar.errorlevel = 1
     tar.extractall(destination_path)
+
+
+def remove_file(file_path):
+    """Remove a file from the filesystem."""
+    if path.exists(file_path):
+        try:
+            rmtree(file_path)
+        except Exception as e:
+            print('Unable to remove temporary workdir {}'.format(file_path))

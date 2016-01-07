@@ -1,5 +1,9 @@
 FROM deviantony/python:python2
 
-RUN virtualenv -p /usr/bin/python /env && /env/bin/pip install valigator
+COPY valigator.yml /etc/valigator/valigator.yml
 
-CMD ["/env/bin/valigator"]
+# TODO: Fix the warning related to Celery worker running with super privileges.
+# RUN adduser -S -D -H valigator -G root
+# USER valigator
+
+CMD ["/env/bin/python", "-m", "valigator.valigator"]
