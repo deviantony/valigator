@@ -1,6 +1,5 @@
 from __future__ import absolute_import
 import click
-from os import path
 from bottle import post, run, request, abort
 from .utils import generate_uuid, load_configuration
 from .scheduler import validate_backup

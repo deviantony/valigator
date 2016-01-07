@@ -15,6 +15,7 @@ celery:
 mail:
   from_address: 'automated-backup-test@domain'
   to_address: 'destination-adress@domain'
+  title: '[TAG] Backup test failure'
   smtp:
     server: 'smtp.domain'
     port: 25
