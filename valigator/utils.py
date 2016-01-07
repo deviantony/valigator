@@ -31,5 +31,5 @@ def remove_file(file_path):
     if path.exists(file_path):
         try:
             rmtree(file_path)
-        except Exception as e:
+        except Exception:
             print('Unable to remove temporary workdir {}'.format(file_path))

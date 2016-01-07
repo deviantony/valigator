@@ -180,6 +180,7 @@ The configuration file *valigator.yml* is written in `YAML format`_.
     mail:
       from_address: 'automated-backup-test@domain'
       to_address: 'destination-adress@domain'
+      title: '[TAG] Backup test failure'
       smtp:
         server: 'smtp.domain'
         port: 25
@@ -257,6 +258,12 @@ Address from which notification e-mail will be sent.
 
 Notification will be sent to this address. Does not support multiple e-mail addresses.
 
+``subject``
+~~~~~~~~~~~~~~
+
+Title of the e-mail.
+
+
 ``smtp.server``
 ~~~~~~~~~~~~~~~
 
@@ -311,6 +318,53 @@ For example, add a section to test backup for MySQL 5.6:
         command: 'cat /backup/*.sql | mysql -u root'
 
 You'll be able to plan backup tests by sending a POST request to `http://valigator-api.domain:7000/validate/mysql56`.
+
+Reports
+=======
+
+A report is sent via e-mail if a worker task fails or if a backup container returns a code != 0.
+
+These will help you diagnose the issue.
+
+Task failure report example:
+
+.. code-block:: text
+
+  Error: task failure
+
+  Task ID: b2105add-5e5f-43ec-8e65-94ddd1b49658
+
+  Archive: /home/tony/tmp/backup_fake.tar.gz
+
+  Docker image: mongo:2.6
+
+  Exception: file could not be opened successfully
+
+  Traceback:
+   File "/env/lib/python2.7/site-packages/celery/app/trace.py", line 240, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/env/lib/python2.7/site-packages/celery/app/trace.py", line 438, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/app/valigator/scheduler.py", line 25, in validate_backup
+    backup_data['workdir'])
+  File "/app/valigator/utils.py", line 24, in extract_archive
+    tar = tarfile.open(archive_path)
+   File "/usr/lib/python2.7/tarfile.py", line 1672, in open
+    raise ReadError("file could not be opened successfully")
+
+
+Backup test failure report example:
+
+.. code-block:: text
+
+  Error: return code != 0
+
+  Archive: /home/tony/tmp/mongodb_backup_java9-as-prod.wit_20151225.tar.gz
+
+  Docker image: mongo:2.6
+
+  Docker container: d78cb5ef29ea1c3c06d176089ec7a36e564419634f921d31a4130f8478f23e69
+
 
 Limitations
 ===========

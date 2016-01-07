@@ -1,8 +1,11 @@
 import smtplib
+import traceback
+import string
+import cgi
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-# TODO: refactor
+
 # TODO: handle notifier failures (Network unreachable...)
 
 
@@ -15,18 +18,19 @@ class MailNotifier(object):
         self.timeout = configuration['smtp']['timeout']
         self.from_address = configuration['from_address']
         self.to_address = configuration['to_address']
+        self.title = configuration['title']
         self.tls_auth = configuration['smtp']['tls_authentication']
         if self.tls_auth:
             self.user = configuration['smtp']['user']
             self.password = configuration['smtp']['password']
 
-    def notify(self, subject, body):
-        """ Initiate a SMTP session and send an email."""
+    def send_email(self, message):
+        """Initiate a SMTP session and send an email."""
         msg = MIMEMultipart()
         msg['From'] = self.from_address
         msg['To'] = self.to_address
-        msg['Subject'] = subject
-        msg.attach(MIMEText(body, 'plain'))
+        msg['Subject'] = self.title
+        msg.attach(MIMEText('<pre>' + cgi.escape(message) + '</pre>', 'html'))
         smtp = smtplib.SMTP(self.server, self.port,
                             timeout=self.timeout)
         if self.tls_auth:
@@ -35,23 +39,35 @@ class MailNotifier(object):
         smtp.sendmail(self.from_address, self.to_address, msg.as_string())
         smtp.quit()
 
-    def notify_archive(self, archive_path):
-        """Send a notification via email
-        when the backup extraction fails.
-        """
-        self.notify('Automatic backup archive extraction failed',
-                    'Unable to extract archive: ' + archive_path)
+    def send_task_failure_report(self, task_report):
+        """Sends a task failure report via e-mail."""
+        message = task_failure_message(task_report)
+        self.send_email(message)
 
-    def notify_backup(self, archive_path):
-        """Send a notification via email
-        when the backup restoration fails.
-        """
-        self.notify('Automatic backup restoration failed',
-                    'Unable to restore archive: ' + archive_path)
+    def send_report(self, report):
+        """Sends a report via e-mail."""
+        message = report_message(report)
+        self.send_email(message)
 
-    def notify_docker(self, archive_path):
-        """Send a notification via email
-        when the docker container creation fails.
-        """
-        self.notify('Automatic backup restoration failed',
-                    'Unable to create container for archive: ' + archive_path)
+
+def report_message(report):
+    """Report message."""
+    body = 'Error: return code != 0\n\n'
+    body += 'Archive: {}\n\n'.format(report['archive'])
+    body += 'Docker image: {}\n\n'.format(report['image'])
+    body += 'Docker container: {}\n\n'.format(report['container_id'])
+    body = '<pre>' + cgi.escape(body) + '</pre>'
+    return body
+
+
+def task_failure_message(task_report):
+    """Task failure message."""
+    trace_list = traceback.format_tb(task_report['traceback'])
+    body = 'Error: task failure\n\n'
+    body += 'Task ID: {}\n\n'.format(task_report['task_id'])
+    body += 'Archive: {}\n\n'.format(task_report['archive'])
+    body += 'Docker image: {}\n\n'.format(task_report['image'])
+    body += 'Exception: {}\n\n'.format(task_report['exception'])
+    body += 'Traceback:\n {} {}'.format(
+        string.join(trace_list[:-1], ''), trace_list[-1])
+    return body
