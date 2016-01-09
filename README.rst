@@ -6,6 +6,9 @@ valigator
 
 |
 
+.. image:: https://readthedocs.org/projects/valigator/badge/?version=latest
+  :target: http://valigator.readthedocs.org/en/latest/?badge=latest
+  :alt: Documentation Status
 .. image:: https://www.quantifiedcode.com/api/v1/project/6b2de325c287407aaf4998cf49c1c09e/badge.svg
   :target: https://www.quantifiedcode.com/app/project/6b2de325c287407aaf4998cf49c1c09e
   :alt: Code issues
