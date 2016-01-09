@@ -56,7 +56,6 @@ def report_message(report):
     body += 'Archive: {}\n\n'.format(report['archive'])
     body += 'Docker image: {}\n\n'.format(report['image'])
     body += 'Docker container: {}\n\n'.format(report['container_id'])
-    body = '<pre>' + cgi.escape(body) + '</pre>'
     return body
 
 
