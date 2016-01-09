@@ -1,10 +1,6 @@
 valigator
 =========
 
-.. image:: https://badges.gitter.im/deviantony/valigator.svg
-   :alt: Join the chat at https://gitter.im/deviantony/valigator
-   :target: https://gitter.im/deviantony/valigator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-
 .. epigraph::
     *Check your backups before you wreck yourself !*
 
@@ -16,6 +12,9 @@ valigator
 .. image:: https://www.quantifiedcode.com/api/v1/project/6b2de325c287407aaf4998cf49c1c09e/badge.svg
   :target: https://www.quantifiedcode.com/app/project/6b2de325c287407aaf4998cf49c1c09e
   :alt: Code issues
+.. image:: https://badges.gitter.im/deviantony/valigator.svg
+   :alt: Join the chat at https://gitter.im/deviantony/valigator
+   :target: https://gitter.im/deviantony/valigator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
 |
 
