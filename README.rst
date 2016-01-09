@@ -1,6 +1,10 @@
 valigator
 =========
 
+.. image:: https://badges.gitter.im/deviantony/valigator.svg
+   :alt: Join the chat at https://gitter.im/deviantony/valigator
+   :target: https://gitter.im/deviantony/valigator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+
 .. epigraph::
     *Check your backups before you wreck yourself !*
 
