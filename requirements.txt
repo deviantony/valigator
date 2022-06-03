@@ -1,4 +1,4 @@
-bottle==0.12.9
+bottle==0.12.20
 docker-py==1.6.0
 PyYAML==3.11
 click==6.2
